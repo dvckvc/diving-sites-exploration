@@ -39,15 +39,15 @@ interface ApiResponse {
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
     case 'BEGINNER':
-      return 'bg-green-100 text-green-800 border-green-200'
+      return 'bg-green-900 text-green-300 border-green-700'
     case 'INTERMEDIATE':
-      return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      return 'bg-yellow-900 text-yellow-300 border-yellow-700'
     case 'ADVANCED':
-      return 'bg-red-100 text-red-800 border-red-200'
-    case 'EXPERT':
-      return 'bg-purple-100 text-purple-800 border-purple-200'
+      return 'bg-red-900 text-red-300 border-red-700'
+    case 'TECHNICAL':
+      return 'bg-purple-900 text-purple-300 border-purple-700'
     default:
-      return 'bg-gray-100 text-gray-800 border-gray-200'
+      return 'bg-slate-800 text-slate-300 border-slate-600'
   }
 }
 
@@ -61,7 +61,7 @@ const generateSlug = (name: string) => {
 
 function SiteCard({ site }: { site: DiveSite }) {
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
+    <Card className="bg-slate-800 border-slate-700 overflow-hidden hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-200">
       <div className="relative">
         {site.imageUrl ? (
           <Image
@@ -73,8 +73,8 @@ function SiteCard({ site }: { site: DiveSite }) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
-          <div className="w-full h-48 bg-gradient-to-br from-blue-500/20 to-teal-500/20 flex items-center justify-center">
-            <Waves className="h-12 w-12 text-blue-500/40" />
+          <div className="w-full h-48 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center">
+            <Waves className="h-12 w-12 text-cyan-400/60" />
           </div>
         )}
         <Badge className={`absolute top-3 right-3 ${getDifficultyColor(site.difficulty)}`}>
@@ -85,16 +85,16 @@ function SiteCard({ site }: { site: DiveSite }) {
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
-            <CardTitle className="text-lg">{site.name}</CardTitle>
-            <CardDescription className="flex items-center mt-1">
+            <CardTitle className="text-lg text-white">{site.name}</CardTitle>
+            <CardDescription className="flex items-center mt-1 text-slate-300">
               <MapPin className="h-4 w-4 mr-1" />
               {site.location}
             </CardDescription>
           </div>
           <div className="flex items-center">
             <Star className="h-4 w-4 text-yellow-400 fill-current" />
-            <span className="text-sm font-medium ml-1">4.5</span>
-            <span className="text-sm text-gray-500 ml-1">(12)</span>
+            <span className="text-sm font-medium ml-1 text-white">4.5</span>
+            <span className="text-sm text-slate-400 ml-1">(12)</span>
           </div>
         </div>
       </CardHeader>
@@ -230,14 +230,14 @@ export default function ExplorePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
       <Navigation />
       
       {/* Hero Section */}
       <section className="py-12 px-4">
         <div className="container mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Discover Amazing Diving Sites</h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Discover Amazing Diving Sites</h2>
+          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
             Explore the world&apos;s most incredible underwater destinations. From coral reefs to historic wrecks, find your
             next diving adventure.
           </p>

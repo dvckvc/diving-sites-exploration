@@ -102,15 +102,15 @@ interface DiveSite {
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
     case 'BEGINNER':
-      return 'bg-green-100 text-green-800 border-green-200'
+      return 'bg-green-900 text-green-300 border-green-700'
     case 'INTERMEDIATE':
-      return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      return 'bg-yellow-900 text-yellow-300 border-yellow-700'
     case 'ADVANCED':
-      return 'bg-red-100 text-red-800 border-red-200'
+      return 'bg-red-900 text-red-300 border-red-700'
     case 'TECHNICAL':
-      return 'bg-purple-100 text-purple-800 border-purple-200'
+      return 'bg-purple-900 text-purple-300 border-purple-700'
     default:
-      return 'bg-gray-100 text-gray-800 border-gray-200'
+      return 'bg-slate-800 text-slate-300 border-slate-600'
   }
 }
 
@@ -124,30 +124,30 @@ const formatDiveType = (type: string) => {
 
 function LoadingSkeleton() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-900">
       <Navigation />
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Back button skeleton */}
-        <Skeleton className="h-10 w-24 mb-6" />
+        <Skeleton className="h-10 w-24 mb-6 bg-slate-800" />
         
         {/* Hero section skeleton */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
-          <Skeleton className="h-64 w-full" />
+        <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-sm overflow-hidden mb-6">
+          <Skeleton className="h-64 w-full bg-slate-700" />
           <div className="p-6">
-            <Skeleton className="h-8 w-3/4 mb-2" />
-            <Skeleton className="h-4 w-1/2 mb-4" />
+            <Skeleton className="h-8 w-3/4 mb-2 bg-slate-700" />
+            <Skeleton className="h-4 w-1/2 mb-4 bg-slate-700" />
             <div className="flex gap-2 mb-4">
-              <Skeleton className="h-6 w-20" />
-              <Skeleton className="h-6 w-24" />
+              <Skeleton className="h-6 w-20 bg-slate-700" />
+              <Skeleton className="h-6 w-24 bg-slate-700" />
             </div>
-            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full bg-slate-700" />
           </div>
         </div>
         
         {/* Stats skeleton */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Card key={i}>
+            <Card key={i} className="bg-slate-800 border-slate-700">
               <CardContent className="p-4">
                 <Skeleton className="h-8 w-8 mb-2" />
                 <Skeleton className="h-4 w-16 mb-1" />
@@ -263,12 +263,12 @@ export default function DiveSiteDetailsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-slate-900">
         <Navigation />
         <div className="max-w-4xl mx-auto px-4 py-6">
-          <Alert className="border-red-200 bg-red-50">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertDescription className="text-red-700">
+          <Alert className="border-red-700 bg-red-900/50">
+            <AlertTriangle className="h-4 w-4 text-red-400" />
+            <AlertDescription className="text-red-300">
               {error}
             </AlertDescription>
           </Alert>
@@ -300,7 +300,7 @@ export default function DiveSiteDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-900">
       <Navigation />
       
       <div className="max-w-4xl mx-auto px-4 py-6">
@@ -310,7 +310,7 @@ export default function DiveSiteDetailsPage() {
             onClick={() => router.back()} 
             variant="ghost" 
             size="sm"
-            className="text-gray-600 hover:text-gray-900"
+            className="text-slate-400 hover:text-white"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
@@ -318,24 +318,24 @@ export default function DiveSiteDetailsPage() {
         </div>
 
         {/* Hero Section */}
-        <Card className="overflow-hidden mb-6">
+        <Card className="bg-slate-800 border-slate-700 overflow-hidden mb-6">
           {/* Site Image */}
-          <div className="relative h-64 md:h-80 bg-gradient-to-br from-blue-500/20 to-teal-500/20">
+          <div className="relative h-64 md:h-80 bg-gradient-to-br from-cyan-500/20 to-teal-500/20">
             <div className="absolute inset-0 flex items-center justify-center">
-              <Waves className="h-16 w-16 text-blue-500/40" />
+              <Waves className="h-16 w-16 text-cyan-400/60" />
             </div>
             
             {/* Floating Action Buttons */}
             <div className="absolute top-4 right-4 flex gap-2">
-              <Button size="icon" variant="secondary" className="bg-white/90 hover:bg-white">
+              <Button size="icon" variant="secondary" className="bg-slate-800/90 hover:bg-slate-800 border-slate-600">
                 <Share2 className="h-4 w-4" />
               </Button>
               {session && (
                 <Button 
                   size="icon" 
                   variant="secondary" 
-                  className={`bg-white/90 hover:bg-white ${
-                    isFavorited ? 'text-red-500' : 'text-gray-600'
+                  className={`bg-slate-800/90 hover:bg-slate-800 border-slate-600 ${
+                    isFavorited ? 'text-red-400' : 'text-slate-400'
                   }`}
                   onClick={() => setIsFavorited(!isFavorited)}
                 >

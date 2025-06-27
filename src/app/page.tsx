@@ -11,17 +11,17 @@ export default function Home() {
   const { data: session } = useSession()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
       <Navigation />
       
       {/* Hero Section */}
       <section className="relative py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
             Discover Amazing
-            <span className="text-blue-600 block">Diving Sites</span>
+            <span className="text-cyan-400 block">Diving Sites</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-slate-300 mb-8 max-w-3xl mx-auto">
             Explore underwater worlds, share your experiences, and connect with the diving community. 
             Find detailed information about dive sites worldwide.
           </p>
@@ -51,37 +51,37 @@ export default function Home() {
       {/* Features Section */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-3xl font-bold text-center text-white mb-12">
             Why Choose Diving Sites?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card>
+            <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
-                <MapPin className="h-8 w-8 text-blue-600 mb-2" />
-                <CardTitle>Detailed Locations</CardTitle>
-                <CardDescription>
+                <MapPin className="h-8 w-8 text-cyan-400 mb-2" />
+                <CardTitle className="text-white">Detailed Locations</CardTitle>
+                <CardDescription className="text-slate-300">
                   Get comprehensive information about dive sites including depth, conditions, 
                   marine life, and safety details.
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card>
+            <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
-                <Star className="h-8 w-8 text-blue-600 mb-2" />
-                <CardTitle>Community Reviews</CardTitle>
-                <CardDescription>
+                <Star className="h-8 w-8 text-cyan-400 mb-2" />
+                <CardTitle className="text-white">Community Reviews</CardTitle>
+                <CardDescription className="text-slate-300">
                   Read real reviews from fellow divers and share your own experiences 
                   to help the community.
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card>
+            <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
-                <Users className="h-8 w-8 text-blue-600 mb-2" />
-                <CardTitle>Expert Guides</CardTitle>
-                <CardDescription>
+                <Users className="h-8 w-8 text-cyan-400 mb-2" />
+                <CardTitle className="text-white">Expert Guides</CardTitle>
+                <CardDescription className="text-slate-300">
                   Connect with certified dive guides and instructors who share 
                   professional insights and recommendations.
                 </CardDescription>
@@ -93,16 +93,16 @@ export default function Home() {
 
       {/* User Status Section */}
       {session && (
-        <section className="py-16 px-4 bg-white">
+        <section className="py-16 px-4 bg-slate-800">
           <div className="max-w-4xl mx-auto">
-            <Card>
+            <Card className="bg-slate-900 border-slate-600">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Waves className="h-6 w-6 text-blue-600" />
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Waves className="h-6 w-6 text-cyan-400" />
                   Welcome back, {session.user.name}!
                 </CardTitle>
-                <CardDescription>
-                  You&apos;re signed in as a <strong>{session.user.role}</strong>. 
+                <CardDescription className="text-slate-300">
+                  You&apos;re signed in as a <strong className="text-cyan-400">{session.user.role}</strong>. 
                   {session.user.role === 'ADMIN' && ' You have full system access.'}
                   {session.user.role === 'GUIDE' && ' You can add and manage dive sites.'}
                   {session.user.role === 'USER' && ' You can review sites and manage favorites.'}
@@ -129,51 +129,51 @@ export default function Home() {
       )}
 
       {/* Test Accounts Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-slate-900">
         <div className="max-w-4xl mx-auto text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">
+          <h3 className="text-2xl font-bold text-white mb-6">
             Test the Platform
           </h3>
-          <p className="text-gray-600 mb-8">
+          <p className="text-slate-300 mb-8">
             Use these demo accounts to explore different user roles and features:
           </p>
           
           <div className="grid md:grid-cols-3 gap-6">
-            <Card>
+            <Card className="bg-slate-800 border-slate-600">
               <CardHeader>
-                <CardTitle className="text-lg">Admin Account</CardTitle>
-                <CardDescription>Full system access</CardDescription>
+                <CardTitle className="text-lg text-white">Admin Account</CardTitle>
+                <CardDescription className="text-slate-300">Full system access</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-600">
-                  <strong>Email:</strong> admin@divingsites.com<br />
-                  <strong>Password:</strong> admin123
+                <p className="text-sm text-slate-400">
+                  <strong className="text-cyan-400">Email:</strong> admin@divingsites.com<br />
+                  <strong className="text-cyan-400">Password:</strong> admin123
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-slate-800 border-slate-600">
               <CardHeader>
-                <CardTitle className="text-lg">Guide Account</CardTitle>
-                <CardDescription>Add & manage dive sites</CardDescription>
+                <CardTitle className="text-lg text-white">Guide Account</CardTitle>
+                <CardDescription className="text-slate-300">Add & manage dive sites</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-600">
-                  <strong>Email:</strong> guide@divingsites.com<br />
-                  <strong>Password:</strong> guide123
+                <p className="text-sm text-slate-400">
+                  <strong className="text-cyan-400">Email:</strong> guide@divingsites.com<br />
+                  <strong className="text-cyan-400">Password:</strong> guide123
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-slate-800 border-slate-600">
               <CardHeader>
-                <CardTitle className="text-lg">User Account</CardTitle>
-                <CardDescription>Review & favorite sites</CardDescription>
+                <CardTitle className="text-lg text-white">User Account</CardTitle>
+                <CardDescription className="text-slate-300">Review & favorite sites</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-600">
-                  <strong>Email:</strong> user@divingsites.com<br />
-                  <strong>Password:</strong> user123
+                <p className="text-sm text-slate-400">
+                  <strong className="text-cyan-400">Email:</strong> user@divingsites.com<br />
+                  <strong className="text-cyan-400">Password:</strong> user123
                 </p>
               </CardContent>
             </Card>

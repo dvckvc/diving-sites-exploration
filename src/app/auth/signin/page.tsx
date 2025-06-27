@@ -59,22 +59,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 px-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4">
+      <Card className="w-full max-w-md bg-slate-800 border-slate-700">
         <CardHeader className="space-y-4">
           <div className="flex items-center justify-center">
-            <Waves className="h-8 w-8 text-blue-600 mr-2" />
-            <h1 className="text-2xl font-bold text-gray-900">Diving Sites</h1>
+            <Waves className="h-8 w-8 text-cyan-400 mr-2" />
+            <h1 className="text-2xl font-bold text-white">Diving Sites</h1>
           </div>
-          <CardTitle className="text-center text-xl">Welcome back</CardTitle>
-          <CardDescription className="text-center">
+          <CardTitle className="text-center text-xl text-white">Welcome back</CardTitle>
+          <CardDescription className="text-center text-slate-300">
             Sign in to your account to explore amazing diving locations
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {error && (
-              <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+              <div className="p-3 text-sm text-red-300 bg-red-900/50 border border-red-700 rounded-md">
                 {error}
               </div>
             )}
