@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'leaflet/dist/leaflet.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -173,4 +174,40 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Leaflet map customizations for dark theme */
+.leaflet-container {
+  @apply rounded-lg;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply bg-white border border-gray-200 rounded-lg;
+}
+
+.leaflet-popup-tip {
+  @apply bg-white;
+}
+
+.leaflet-control-attribution {
+  @apply bg-black/70 text-white text-xs;
+}
+
+.leaflet-control-zoom a {
+  @apply bg-slate-800 border-slate-700 text-white;
+}
+
+.leaflet-control-zoom a:hover {
+  @apply bg-slate-700;
+}
+
+/* Custom dive marker styles */
+.dive-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-marker-icon {
+  background: transparent !important;
+  border: none !important;
 }

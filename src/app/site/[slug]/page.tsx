@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { useParams, useRouter } from 'next/navigation'
 import { 
   ArrowLeft, 
@@ -26,12 +27,35 @@ import { Navigation } from '@/components/Navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
 import { StarRating } from '@/components/ui/star-rating'
 import { ReviewForm } from '@/components/ReviewForm'
 import { MarineLifeDisplay } from '@/components/MarineLifeDisplay'
+
+// Dynamically import the map component to avoid SSR issues
+const DiveSiteMap = dynamic(
+  () => import('@/components/DiveSiteMap').then((mod) => mod.DiveSiteMap),
+  { 
+    ssr: false,
+    loading: () => (
+      <Card className="bg-slate-800 border-slate-700 mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-white">
+            <MapPin className="h-5 w-5 text-cyan-400" />
+            Location
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-64 bg-slate-700 rounded-lg flex items-center justify-center">
+            <div className="text-slate-400">Loading map...</div>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+)
 
 interface Review {
   id: string
@@ -356,10 +380,10 @@ export default function DiveSiteDetailsPage() {
           <CardHeader className="pb-4">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <CardTitle className="text-2xl font-bold text-gray-900 mb-2">
+                <CardTitle className="text-2xl font-bold text-white mb-2">
                   {site.name}
                 </CardTitle>
-                <CardDescription className="flex items-center text-base">
+                <CardDescription className="flex items-center text-base text-slate-300">
                   <MapPin className="h-4 w-4 mr-1" />
                   {site.location}
                 </CardDescription>
@@ -368,7 +392,7 @@ export default function DiveSiteDetailsPage() {
               {session && site.averageRating && (
                 <div className="ml-4">
                   {renderStarRating(site.averageRating)}
-                  <div className="text-xs text-gray-500 text-center mt-1">
+                  <div className="text-xs text-slate-400 text-center mt-1">
                     {site.counts?.reviews} review{site.counts?.reviews !== 1 ? 's' : ''}
                   </div>
                 </div>
@@ -378,7 +402,7 @@ export default function DiveSiteDetailsPage() {
             {/* Dive Types */}
             <div className="flex flex-wrap gap-2 mt-4">
               {site.diveType.map((type, index) => (
-                <Badge key={index} variant="secondary" className="text-xs">
+                <Badge key={index} variant="secondary" className="text-xs bg-slate-700 text-slate-300 border-slate-600">
                   {formatDiveType(type)}
                 </Badge>
               ))}
@@ -386,7 +410,7 @@ export default function DiveSiteDetailsPage() {
             
             {/* Description */}
             {site.description && (
-              <p className="text-gray-700 mt-4 leading-relaxed">
+              <p className="text-slate-300 mt-4 leading-relaxed">
                 {site.description}
               </p>
             )}
@@ -395,303 +419,312 @@ export default function DiveSiteDetailsPage() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <Card>
+          <Card className="bg-slate-800 border-slate-700">
             <CardContent className="p-4 text-center">
-              <Gauge className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-              <div className="font-semibold text-sm">
+              <Gauge className="h-8 w-8 text-cyan-400 mx-auto mb-2" />
+              <div className="font-semibold text-sm text-white">
                 {site.depthMin}-{site.depthMax}m
               </div>
-              <div className="text-xs text-gray-500">Depth</div>
+              <div className="text-xs text-slate-400">Depth</div>
             </CardContent>
           </Card>
           
           {session && site.temperatureMin && site.temperatureMax && (
-            <Card>
+            <Card className="bg-slate-800 border-slate-700">
               <CardContent className="p-4 text-center">
-                <Thermometer className="h-8 w-8 text-orange-600 mx-auto mb-2" />
-                <div className="font-semibold text-sm">
+                <Thermometer className="h-8 w-8 text-orange-400 mx-auto mb-2" />
+                <div className="font-semibold text-sm text-white">
                   {site.temperatureMin}-{site.temperatureMax}°C
                 </div>
-                <div className="text-xs text-gray-500">Temperature</div>
+                <div className="text-xs text-slate-400">Temperature</div>
               </CardContent>
             </Card>
           )}
           
           {session && site.visibilityMin && site.visibilityMax && (
-            <Card>
+            <Card className="bg-slate-800 border-slate-700">
               <CardContent className="p-4 text-center">
-                <Eye className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <div className="font-semibold text-sm">
+                <Eye className="h-8 w-8 text-green-400 mx-auto mb-2" />
+                <div className="font-semibold text-sm text-white">
                   {site.visibilityMin}-{site.visibilityMax}m
                 </div>
-                <div className="text-xs text-gray-500">Visibility</div>
+                <div className="text-xs text-slate-400">Visibility</div>
               </CardContent>
             </Card>
           )}
           
           {session && site.averageDiveDuration && (
-            <Card>
+            <Card className="bg-slate-800 border-slate-700">
               <CardContent className="p-4 text-center">
-                <Clock className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                <div className="font-semibold text-sm">
+                <Clock className="h-8 w-8 text-purple-400 mx-auto mb-2" />
+                <div className="font-semibold text-sm text-white">
                   {site.averageDiveDuration} min
                 </div>
-                <div className="text-xs text-gray-500">Avg Duration</div>
+                <div className="text-xs text-slate-400">Avg Duration</div>
               </CardContent>
             </Card>
           )}
         </div>
 
-        {/* Content Tabs */}
+        {/* Location Map */}
+        <DiveSiteMap
+          latitude={site.latitude}
+          longitude={site.longitude}
+          siteName={site.name}
+          location={site.location}
+          className="mb-6"
+        />
+
+        {/* Content Sections */}
         {session ? (
-          <Tabs defaultValue="details" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="details">Details</TabsTrigger>
-              <TabsTrigger value="marine-life">Marine Life</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
-              <TabsTrigger value="photos">Photos</TabsTrigger>
-            </TabsList>
+          <div className="space-y-6">
+            {/* Review Form */}
+            {showReviewForm && (
+              <ReviewForm
+                siteId={params.slug as string}
+                onSuccess={handleReviewSuccess}
+                onCancel={() => setShowReviewForm(false)}
+                existingReview={userReview ? {
+                  rating: userReview.rating,
+                  title: userReview.title,
+                  content: userReview.content
+                } : undefined}
+              />
+            )}
 
-            <TabsContent value="details" className="space-y-4">
-              {/* Diving Conditions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Info className="h-5 w-5" />
-                    Diving Conditions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {site.currentConditions && (
-                    <div>
-                      <div className="font-medium text-sm text-gray-600">Current Conditions</div>
-                      <div className="text-gray-900">{site.currentConditions}</div>
-                    </div>
-                  )}
-                  
-                  {site.driftPotential && (
-                    <div>
-                      <div className="font-medium text-sm text-gray-600">Drift Potential</div>
-                      <div className="text-gray-900">{site.driftPotential}</div>
-                    </div>
-                  )}
-                  
-                  {site.entryPoint && (
-                    <div>
-                      <div className="font-medium text-sm text-gray-600">Entry Point</div>
-                      <div className="text-gray-900">{site.entryPoint}</div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Certifications Required */}
-              {site.requiredCertification && site.requiredCertification.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Award className="h-5 w-5" />
-                      Required Certifications
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {site.requiredCertification.map((cert, index) => (
-                        <Badge key={index} variant="outline">
-                          {cert.replace('_', ' ')}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Hazards & Safety */}
-              {(site.hazards || site.emergencyInfo) && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <AlertTriangle className="h-5 w-5" />
-                      Safety Information
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {site.hazards && (
-                      <div>
-                        <div className="font-medium text-sm text-gray-600">Potential Hazards</div>
-                        <div className="text-gray-900">{site.hazards}</div>
-                      </div>
-                    )}
-                    
-                    {site.emergencyInfo && (
-                      <div>
-                        <div className="font-medium text-sm text-gray-600">Emergency Information</div>
-                        <div className="text-gray-900">{site.emergencyInfo}</div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Permits & Fees */}
-              {site.permitsFees && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Permits & Fees</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700">{site.permitsFees}</p>
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
-
-            <TabsContent value="marine-life">
-              <MarineLifeDisplay siteId={params.slug as string} />
-            </TabsContent>
-
-            <TabsContent value="reviews">
-              <div className="space-y-4">
-                {/* Review Form */}
-                {showReviewForm && (
-                  <ReviewForm
-                    siteId={params.slug as string}
-                    onSuccess={handleReviewSuccess}
-                    onCancel={() => setShowReviewForm(false)}
-                    existingReview={userReview ? {
-                      rating: userReview.rating,
-                      title: userReview.title,
-                      content: userReview.content
-                    } : undefined}
-                  />
+            {/* Diving Conditions */}
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Info className="h-5 w-5 text-cyan-400" />
+                  Diving Conditions
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {site.currentConditions && (
+                  <div>
+                    <div className="font-medium text-sm text-slate-400">Current Conditions</div>
+                    <div className="text-slate-200">{site.currentConditions}</div>
+                  </div>
                 )}
                 
-                {/* Reviews List */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <MessageCircle className="h-5 w-5" />
-                        Reviews ({site.counts?.reviews || 0})
-                      </div>
-                      <div className="flex gap-2">
-                        {userReview ? (
-                          <>
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => setShowReviewForm(true)}
-                            >
-                              Edit Review
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="destructive"
-                              onClick={handleDeleteReview}
-                            >
-                              Delete Review
-                            </Button>
-                          </>
-                        ) : (
-                          <Button 
-                            size="sm"
-                            onClick={() => setShowReviewForm(true)}
-                          >
-                            Write Review
-                          </Button>
-                        )}
-                      </div>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {site.reviews && site.reviews.length > 0 ? (
-                      <div className="space-y-4">
-                        {site.reviews.map((review, index) => (
-                          <div key={review.id || index} className="border-b pb-4 last:border-b-0 last:pb-0">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                  {review.user?.name?.charAt(0) || 'U'}
-                                </div>
-                                <div>
-                                  <div className="font-medium text-sm">
-                                    {review.user?.name || 'Anonymous'}
-                                    {review.user?.id === session?.user?.id && (
-                                      <Badge variant="outline" className="ml-2 text-xs">
-                                        Your Review
-                                      </Badge>
-                                    )}
-                                  </div>
-                                  <div className="text-xs text-gray-500">
-                                    {new Date(review.createdAt).toLocaleDateString()}
-                                  </div>
-                                </div>
-                              </div>
-                              {renderStarRating(review.rating)}
-                            </div>
-                            {review.title && (
-                              <div className="font-medium text-sm mb-1">{review.title}</div>
-                            )}
-                            <p className="text-gray-700 text-sm">{review.content}</p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500 italic text-center py-8">
-                        No reviews yet. Be the first to review this dive site!
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
+                {site.driftPotential && (
+                  <div>
+                    <div className="font-medium text-sm text-slate-400">Drift Potential</div>
+                    <div className="text-slate-200">{site.driftPotential}</div>
+                  </div>
+                )}
+                
+                {site.entryPoint && (
+                  <div>
+                    <div className="font-medium text-sm text-slate-400">Entry Point</div>
+                    <div className="text-slate-200">{site.entryPoint}</div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
 
-            <TabsContent value="photos">
-              <Card>
+            {/* Certifications Required */}
+            {site.requiredCertification && site.requiredCertification.length > 0 && (
+              <Card className="bg-slate-800 border-slate-700">
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Camera className="h-5 w-5" />
-                      Photos ({site.counts?.photos || 0})
-                    </div>
-                    <Button size="sm">Add Photo</Button>
+                  <CardTitle className="flex items-center gap-2 text-white">
+                    <Award className="h-5 w-5 text-cyan-400" />
+                    Required Certifications
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {site.photos && site.photos.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {site.photos.map((photo, index) => (
-                        <div key={index} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                          <div className="w-full h-full flex items-center justify-center">
-                            <Camera className="h-8 w-8 text-gray-400" />
-                          </div>
-                        </div>
-                      ))}
+                  <div className="flex flex-wrap gap-2">
+                    {site.requiredCertification.map((cert, index) => (
+                      <Badge key={index} variant="outline" className="border-slate-600 text-slate-300">
+                        {cert.replace('_', ' ')}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Hazards & Safety */}
+            {(site.hazards || site.emergencyInfo) && (
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-white">
+                    <AlertTriangle className="h-5 w-5 text-red-400" />
+                    Safety Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {site.hazards && (
+                    <div>
+                      <div className="font-medium text-sm text-slate-400">Potential Hazards</div>
+                      <div className="text-slate-200">{site.hazards}</div>
                     </div>
-                  ) : (
-                    <p className="text-gray-500 italic text-center py-8">
-                      No photos yet. Share your underwater shots!
-                    </p>
+                  )}
+                  
+                  {site.emergencyInfo && (
+                    <div>
+                      <div className="font-medium text-sm text-slate-400">Emergency Information</div>
+                      <div className="text-slate-200">{site.emergencyInfo}</div>
+                    </div>
                   )}
                 </CardContent>
               </Card>
-            </TabsContent>
-          </Tabs>
+            )}
+
+            {/* Permits & Fees */}
+            {site.permitsFees && (
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Permits & Fees</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-300">{site.permitsFees}</p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Marine Life */}
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Waves className="h-5 w-5 text-teal-400" />
+                  Marine Life
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <MarineLifeDisplay siteId={params.slug as string} />
+              </CardContent>
+            </Card>
+
+            {/* Reviews */}
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between text-white">
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="h-5 w-5 text-cyan-400" />
+                    Reviews ({site.counts?.reviews || 0})
+                  </div>
+                  <div className="flex gap-2">
+                    {userReview ? (
+                      <>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => setShowReviewForm(true)}
+                          className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                        >
+                          Edit Review
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="destructive"
+                          onClick={handleDeleteReview}
+                          className="bg-red-900 hover:bg-red-800 text-red-300"
+                        >
+                          Delete Review
+                        </Button>
+                      </>
+                    ) : (
+                      <Button 
+                        size="sm"
+                        onClick={() => setShowReviewForm(true)}
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white"
+                      >
+                        Write Review
+                      </Button>
+                    )}
+                  </div>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {site.reviews && site.reviews.length > 0 ? (
+                  <div className="space-y-4">
+                    {site.reviews.map((review, index) => (
+                      <div key={review.id || index} className="border-b border-slate-700 pb-4 last:border-b-0 last:pb-0">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                              {review.user?.name?.charAt(0) || 'U'}
+                            </div>
+                            <div>
+                              <div className="font-medium text-sm text-slate-200">
+                                {review.user?.name || 'Anonymous'}
+                                {review.user?.id === session?.user?.id && (
+                                  <Badge variant="outline" className="ml-2 text-xs border-slate-600 text-slate-300">
+                                    Your Review
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="text-xs text-slate-400">
+                                {new Date(review.createdAt).toLocaleDateString()}
+                              </div>
+                            </div>
+                          </div>
+                          {renderStarRating(review.rating)}
+                        </div>
+                        {review.title && (
+                          <div className="font-medium text-sm mb-1 text-slate-200">{review.title}</div>
+                        )}
+                        <p className="text-slate-300 text-sm">{review.content}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-slate-400 italic text-center py-8">
+                    No reviews yet. Be the first to review this dive site!
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Photos */}
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between text-white">
+                  <div className="flex items-center gap-2">
+                    <Camera className="h-5 w-5 text-cyan-400" />
+                    Photos ({site.counts?.photos || 0})
+                  </div>
+                  <Button size="sm" className="bg-cyan-600 hover:bg-cyan-700 text-white">
+                    Add Photo
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {site.photos && site.photos.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {site.photos.map((photo, index) => (
+                      <div key={index} className="relative aspect-square bg-slate-700 rounded-lg overflow-hidden">
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Camera className="h-8 w-8 text-slate-400" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-slate-400 italic text-center py-8">
+                    No photos yet. Share your underwater shots!
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         ) : (
           /* Guest View - Limited Information */
-          <Card>
+          <Card className="bg-slate-800 border-slate-700">
             <CardHeader>
-              <CardTitle>Sign in for Full Details</CardTitle>
+              <CardTitle className="text-white">Sign in for Full Details</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">
+              <p className="text-slate-300 mb-4">
                 Sign in to access detailed diving conditions, marine life information, reviews, and photos.
               </p>
               <div className="flex gap-2">
-                <Button asChild>
+                <Button asChild className="bg-cyan-600 hover:bg-cyan-700 text-white">
                   <Link href="/auth/signin">Sign In</Link>
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="outline" asChild className="border-slate-600 text-slate-300 hover:bg-slate-700">
                   <Link href="/auth/register">Create Account</Link>
                 </Button>
               </div>
@@ -700,15 +733,15 @@ export default function DiveSiteDetailsPage() {
         )}
 
         {/* Site Metadata */}
-        <Card className="mt-6">
+        <Card className="mt-6 bg-slate-800 border-slate-700">
           <CardContent className="p-4">
-            <div className="flex items-center justify-between text-sm text-gray-500">
+            <div className="flex items-center justify-between text-sm text-slate-400">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 <span>
                   Added by {site.createdBy.name || 'Anonymous'} 
                   {site.createdBy.role === 'GUIDE' && (
-                    <Badge variant="outline" className="ml-2 text-xs">
+                    <Badge variant="outline" className="ml-2 text-xs border-slate-600 text-slate-300">
                       Dive Guide
                     </Badge>
                   )}

@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import { NextAuthOptions } from "next-auth"
 import type { Session, User } from "next-auth"
 import type { JWT } from "next-auth/jwt"
 import CredentialsProvider from "next-auth/providers/credentials"
@@ -33,7 +33,7 @@ declare module "next-auth/jwt" {
   }
 }
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -100,8 +100,5 @@ export const authOptions = {
   },
   pages: {
     signIn: "/auth/signin",
-    signUp: "/auth/signup",
   },
 }
-
-export default NextAuth(authOptions)
