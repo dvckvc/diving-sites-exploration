@@ -1,0 +1,282 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  GUEST
+  USER
+  GUIDE
+  ADMIN
+}
+
+enum DiveType {
+  SHORE
+  BOAT
+  WRECK
+  CAVE
+  DRIFT
+  WALL
+  REEF
+  NIGHT
+  TECHNICAL
+}
+
+enum DifficultyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  TECHNICAL
+}
+
+enum CurrentCondition {
+  MILD
+  MODERATE
+  STRONG
+}
+
+enum CertificationLevel {
+  OPEN_WATER
+  ADVANCED
+  RESCUE
+  DIVEMASTER
+  INSTRUCTOR
+  TECHNICAL
+  CAVE
+  WRECK
+}
+
+enum MarineLifeType {
+  FISH
+  PLANT
+  CORAL
+  INVERTEBRATE
+  MAMMAL
+  REPTILE
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  avatar    String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  diveSites     DiveSite[]
+  reviews       Review[]
+  comments      Comment[]
+  favorites     Favorite[]
+  reports       Report[]
+  photos        Photo[]
+  sessions      Session[]
+  
+  @@map("users")
+}
+
+model DiveSite {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  
+  // Location
+  location    String   // "Maldives, North Male Atoll"
+  latitude    Float
+  longitude   Float
+  
+  // Basic Info (Guest accessible)
+  depthMin    Int      // in meters
+  depthMax    Int      // in meters
+  diveType    DiveType[]
+  difficulty  DifficultyLevel
+  
+  // Detailed Info (User+ accessible)
+  currentConditions     CurrentCondition?
+  driftPotential       String? // "Low/Medium/High"
+  entryPoint           String? // "Beach entry", "Boat drop"
+  visibilityMin        Int? // in meters
+  visibilityMax        Int? // in meters
+  temperatureMin       Int? // in celsius
+  temperatureMax       Int? // in celsius
+  emergencyInfo        String? // Contact info, nearest chamber
+  requiredCertification CertificationLevel[]
+  marineLife           String? // JSON or text description
+  averageDiveDuration  Int? // in minutes
+  hazards              String? // JSON or text
+  permitsFees          String? // Permit requirements, fees
+  ecoData              String? // Conservation status, biodiversity
+  
+  // Meta
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String
+  
+  // Relations
+  createdBy   User       @relation(fields: [createdById], references: [id])
+  reviews     Review[]
+  comments    Comment[]
+  favorites   Favorite[]
+  photos      Photo[]
+  reports     Report[]
+  diveSiteMarineLife DiveSiteMarineLife[]
+  
+  @@map("dive_sites")
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  rating     Int      // 1-10 stars
+  title      String?
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  // Relations
+  userId     String
+  diveSiteId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  diveSite   DiveSite @relation(fields: [diveSiteId], references: [id], onDelete: Cascade)
+  reports    Report[]
+  
+  @@unique([userId, diveSiteId]) // One review per user per site
+  @@map("reviews")
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  // Relations
+  userId     String
+  diveSiteId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  diveSite   DiveSite @relation(fields: [diveSiteId], references: [id], onDelete: Cascade)
+  reports    Report[]
+  
+  @@map("comments")
+}
+
+model Favorite {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  
+  // Relations
+  userId     String
+  diveSiteId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  diveSite   DiveSite @relation(fields: [diveSiteId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, diveSiteId])
+  @@map("favorites")
+}
+
+model Photo {
+  id          String   @id @default(cuid())
+  filename    String
+  originalName String
+  url         String
+  caption     String?
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  userId      String
+  diveSiteId  String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  diveSite    DiveSite @relation(fields: [diveSiteId], references: [id], onDelete: Cascade)
+  
+  @@map("photos")
+}
+
+model MarineLife {
+  id          String        @id @default(cuid())
+  name        String        // Common name
+  latinName   String?       // Scientific name
+  type        MarineLifeType
+  image       String?       // Image URL or filename
+  description String?       // Brief description
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  // Relations
+  diveSiteMarineLife DiveSiteMarineLife[]
+  
+  @@map("marine_life")
+}
+
+model DiveSiteMarineLife {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  
+  // Relations
+  diveSiteId   String
+  marineLifeId String
+  diveSite     DiveSite   @relation(fields: [diveSiteId], references: [id], onDelete: Cascade)
+  marineLife   MarineLife @relation(fields: [marineLifeId], references: [id], onDelete: Cascade)
+  
+  @@unique([diveSiteId, marineLifeId])
+  @@map("dive_site_marine_life")
+}
+
+enum ReportType {
+  INAPPROPRIATE_CONTENT
+  SPAM
+  WRONG_INFORMATION
+  SAFETY_CONCERN
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+
+model Report {
+  id          String       @id @default(cuid())
+  type        ReportType
+  reason      String
+  description String?
+  status      ReportStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  // Relations - flexible reporting (can report sites, reviews, comments, users)
+  reporterId     String
+  diveSiteId     String?
+  reviewId       String?
+  commentId      String?
+  reportedUserId String? // For reporting users
+  
+  reporter       User      @relation(fields: [reporterId], references: [id])
+  diveSite       DiveSite? @relation(fields: [diveSiteId], references: [id])
+  review         Review?   @relation(fields: [reviewId], references: [id])
+  comment        Comment?  @relation(fields: [commentId], references: [id])
+  
+  @@map("reports")
+}
+
+// For future features
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+}

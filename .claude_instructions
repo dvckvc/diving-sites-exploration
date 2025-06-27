@@ -1,0 +1,97 @@
+# Claude Instructions
+
+## Project Context
+This is a Next.js diving sites exploration website that helps divers discover, review, and share information about diving locations worldwide.
+
+## User Roles & Permissions
+- **Guest**: View basic dive site info (name, location, depth, type, difficulty)
+- **User**: Full dive site details + reviews/comments + reporting + favorites
+- **Guide**: All User permissions + add/edit dive sites + manage own content
+- **Admin**: Full system access + user management + content moderation + reports
+
+## Dive Site Information Structure
+**Basic Info (Guest Access)**
+- Name, Location, GPS coordinates, Depth Range, Dive Type, Difficulty Level
+
+**Detailed Info (User+ Access)**  
+- Current Conditions, Entry Point, Visibility Range, Temperature
+- Required Certification, Marine Life, Dive Duration
+- Hazards, Permits/Fees, Emergency Info, Eco Data
+- User Reviews & Ratings
+
+## Authentication Strategy
+- Custom email/password registration (no providers)
+- No email verification for alpha (add later)
+- JWT-based sessions with NextAuth.js
+- Role-based access control
+
+## Tech Stack (Alpha MVP)
+- **Frontend**: Next.js 14+ with App Router
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js with custom credentials provider
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **Image Storage**: Simple file upload to /public (upgrade to Cloudinary later)
+- **Deployment**: Vercel (free tier initially)
+
+## Scalability Considerations (2000+ users)
+- Database indexing on frequently queried fields (location, difficulty, rating)
+- Pagination for dive sites, reviews, and comments
+- Image optimization and lazy loading
+- Database connection pooling
+- Caching strategy for popular dive sites
+- Rate limiting for API endpoints
+- Proper error handling and logging
+
+## Database Schema Priorities (Alpha)
+- Users with role-based access (Guest, User, Guide, Admin)
+- Comprehensive DiveSite model with guest/user access levels
+- Reviews (one per user per site) and Comments
+- Favorites, Photos, and Reports system
+- Proper indexing for performance at scale
+
+## Coding Style & Preferences
+- Use TypeScript with strict typing
+- Prefer Next.js App Router patterns and server components
+- Use Prisma schema-first approach for database modeling
+- Follow Next.js file-based routing conventions
+- Use Tailwind CSS with component composition
+- Implement proper SEO with Next.js metadata API
+
+## Code Structure
+- Keep components small and focused (single responsibility)
+- Use custom hooks for reusable logic
+- Prefer composition over inheritance
+- Use absolute imports with path aliases (@/components, @/utils)
+- Group related files in feature folders
+
+## Libraries & Tools (Alpha)
+- **Database**: Prisma ORM with PostgreSQL
+- **Auth**: NextAuth.js with custom credentials provider (no email verification)
+- **UI Components**: shadcn/ui + Radix primitives
+- **Forms**: React Hook Form + Zod validation
+- **Image Handling**: next/image with local storage
+- **Password**: bcryptjs for hashing
+- **State**: React built-in state (useState, useContext)
+
+## Communication Style
+- Be concise but thorough in explanations
+- Show code examples when suggesting solutions
+- Ask clarifying questions if requirements are unclear
+- Suggest best practices and performance optimizations
+- Point out potential issues or edge cases
+
+## Specific Guidelines (Alpha Focus)
+- Keep features simple but extensible for future upgrades
+- Store latitude/longitude in database even if not using maps yet
+- Use semantic location strings ("Maldives", "Red Sea, Egypt") for now
+- Design components with future map integration in mind
+- Implement basic SEO for dive site pages
+- Keep database queries simple and efficient
+- Focus on core user experience over advanced features
+
+## Don't Do
+- Don't implement complex features that aren't in Alpha scope
+- Don't optimize for scale yet (focus on functionality)
+- Don't add external APIs unless absolutely necessary
+- Don't over-engineer the database schema initially
+- Don't ignore future extensibility when making decisions

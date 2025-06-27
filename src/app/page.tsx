@@ -1,103 +1,185 @@
-import Image from "next/image";
+"use client"
+
+import { useSession } from "next-auth/react"
+import { Navigation } from "@/components/Navigation"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Waves, MapPin, Star, Users } from "lucide-react"
+import Link from "next/link"
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { data: session } = useSession()
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
+      <Navigation />
+      
+      {/* Hero Section */}
+      <section className="relative py-20 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+            Discover Amazing
+            <span className="text-blue-600 block">Diving Sites</span>
+          </h1>
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Explore underwater worlds, share your experiences, and connect with the diving community. 
+            Find detailed information about dive sites worldwide.
+          </p>
+          
+          {!session ? (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" asChild>
+                <Link href="/auth/register">Get Started</Link>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/auth/signin">Sign In</Link>
+              </Button>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" asChild>
+                <Link href="/explore">Explore Dive Sites</Link>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/dashboard">My Dashboard</Link>
+              </Button>
+            </div>
+          )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+            Why Choose Diving Sites?
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card>
+              <CardHeader>
+                <MapPin className="h-8 w-8 text-blue-600 mb-2" />
+                <CardTitle>Detailed Locations</CardTitle>
+                <CardDescription>
+                  Get comprehensive information about dive sites including depth, conditions, 
+                  marine life, and safety details.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <Star className="h-8 w-8 text-blue-600 mb-2" />
+                <CardTitle>Community Reviews</CardTitle>
+                <CardDescription>
+                  Read real reviews from fellow divers and share your own experiences 
+                  to help the community.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <Users className="h-8 w-8 text-blue-600 mb-2" />
+                <CardTitle>Expert Guides</CardTitle>
+                <CardDescription>
+                  Connect with certified dive guides and instructors who share 
+                  professional insights and recommendations.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* User Status Section */}
+      {session && (
+        <section className="py-16 px-4 bg-white">
+          <div className="max-w-4xl mx-auto">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Waves className="h-6 w-6 text-blue-600" />
+                  Welcome back, {session.user.name}!
+                </CardTitle>
+                <CardDescription>
+                  You&apos;re signed in as a <strong>{session.user.role}</strong>. 
+                  {session.user.role === 'ADMIN' && ' You have full system access.'}
+                  {session.user.role === 'GUIDE' && ' You can add and manage dive sites.'}
+                  {session.user.role === 'USER' && ' You can review sites and manage favorites.'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-4">
+                  <Button asChild>
+                    <Link href="/sites">Browse Dive Sites</Link>
+                  </Button>
+                  {(session.user.role === 'GUIDE' || session.user.role === 'ADMIN') && (
+                    <Button variant="outline" asChild>
+                      <Link href="/sites/new">Add New Site</Link>
+                    </Button>
+                  )}
+                  <Button variant="outline" asChild>
+                    <Link href="/dashboard">View Dashboard</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      )}
+
+      {/* Test Accounts Section */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-4xl mx-auto text-center">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">
+            Test the Platform
+          </h3>
+          <p className="text-gray-600 mb-8">
+            Use these demo accounts to explore different user roles and features:
+          </p>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Admin Account</CardTitle>
+                <CardDescription>Full system access</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  <strong>Email:</strong> admin@divingsites.com<br />
+                  <strong>Password:</strong> admin123
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Guide Account</CardTitle>
+                <CardDescription>Add & manage dive sites</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  <strong>Email:</strong> guide@divingsites.com<br />
+                  <strong>Password:</strong> guide123
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">User Account</CardTitle>
+                <CardDescription>Review & favorite sites</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  <strong>Email:</strong> user@divingsites.com<br />
+                  <strong>Password:</strong> user123
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
     </div>
-  );
+  )
 }
