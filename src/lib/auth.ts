@@ -43,10 +43,17 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          console.log("Missing credentials")
           return null
         }
 
         try {
+          // Check if database connection exists
+          if (!process.env.DATABASE_URL) {
+            console.error("DATABASE_URL environment variable is not set")
+            return null
+          }
+
           const user = await prisma.user.findUnique({
             where: { email: credentials.email }
           })
@@ -101,4 +108,18 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/signin",
   },
+  secret: process.env.NEXTAUTH_SECRET,
+}
+
+// Validate required environment variables
+if (!process.env.DATABASE_URL) {
+  console.error("Missing required environment variable: DATABASE_URL")
+}
+
+if (!process.env.NEXTAUTH_SECRET) {
+  console.error("Missing required environment variable: NEXTAUTH_SECRET")
+}
+
+if (!process.env.NEXTAUTH_URL && process.env.NODE_ENV === 'production') {
+  console.error("Missing required environment variable: NEXTAUTH_URL (required in production)")
 }
