@@ -11,36 +11,53 @@ export default function Home() {
   const { data: session } = useSession()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
+    <div className="min-h-screen bg-slate-900">
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative py-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+      <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="/hero_video.mp4" type="video/mp4" />
+            {/* Fallback for browsers that don't support video */}
+            Your browser does not support the video tag.
+          </video>
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto text-center relative z-10">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 drop-shadow-lg">
             Discover Amazing
-            <span className="text-cyan-400 block">Diving Sites</span>
+            <span className="text-cyan-400 block drop-shadow-lg">Diving Sites</span>
           </h1>
-          <p className="text-xl text-slate-300 mb-8 max-w-3xl mx-auto">
+          <p className="text-md md:text-lg lg:text-xl text-slate-200 mb-12 max-w-4xl mx-auto drop-shadow-md leading-relaxed">
             Explore underwater worlds, share your experiences, and connect with the diving community. 
             Find detailed information about dive sites worldwide.
           </p>
           
           {!session ? (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Button size="lg" className="text-lg px-8 py-4 h-auto" asChild>
                 <Link href="/auth/register">Get Started</Link>
               </Button>
-              <Button variant="outline" size="lg" asChild>
+              <Button variant="outline" size="lg" className="text-lg px-8 py-4 h-auto border-2" asChild>
                 <Link href="/auth/signin">Sign In</Link>
               </Button>
             </div>
           ) : (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Button size="lg" className="text-lg px-8 py-4 h-auto" asChild>
                 <Link href="/explore">Explore Dive Sites</Link>
               </Button>
-              <Button variant="outline" size="lg" asChild>
+              <Button variant="outline" size="lg" className="text-lg px-8 py-4 h-auto border-2" asChild>
                 <Link href="/dashboard">My Dashboard</Link>
               </Button>
             </div>
